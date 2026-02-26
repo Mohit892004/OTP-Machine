@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 100px;
+            background-image: url(Image.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+            width: 100%;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            margin: 10px;
+            width: 250px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #message {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #image {
+            background-size: cover;
+            height: 200px;
+            width: 280px;
+            position: sticky;
+            border-radius: 10px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.486);
+            /*border: 5px solid #ffffff;*/
+        }
+
+        /* #Otp-section{
+         display: inline;
+         width: 500px;
+         margin: 0px;
+         position: relative;
+        }*/
+        #Otp-section {
+            width: 400px;
+            margin: auto;
+            padding: 20px;
+            /*background: rgba(255, 255, 255, 0.9);*/
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-shadow: 2px 2px 4px rgb(1, 137, 248);
+        }
+
+        p {
+            background-color: whitesmoke;
+            border-radius: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="Otp-section">
+        <img src="Image.jpg" id="image" alt="Otp-image">
+        <h2>Mobile OTP Verification</h2>
+
+        <input type="text" id="phone" placeholder="Enter Phone Number (+91...)">
+        <br>
+        <button onclick="sendOTP()">Send OTP</button>
+
+        <br>
+
+        <input type="text" id="otp" placeholder="Enter OTP">
+        <br>
+        <button onclick="verifyOTP()">Verify OTP</button>
+
+        <p id="message"></p>
+    </div>
+    <script>
+        async function sendOTP() {
+            const phone = document.getElementById("phone").value;
+
+            const response = await fetch("/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ phone })
+            });
+
+            const data = await response.json();
+            document.getElementById("message").innerText = data.message;
+        }
+
+        async function verifyOTP() {
+            const otp = document.getElementById("otp").value;
+
+            const response = await fetch("/verify-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    phone: document.getElementById("phone").value,
+                    otp
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById("message").innerText = data.message;
+        }
+    </script>
+
+</body>
+
+</html>
